@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>응급실은 있는데, 갈 수 있는 응급실은 어디인가?</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── 네비게이션 ── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">🚑 응급실 뺑뺑이 데이터 리포트</a>
+    <ul class="nav-links">
+      <li><a href="#map-section">지도</a></li>
+      <li><a href="#capacity-section">수용 분석</a></li>
+      <li><a href="#survey-section">시민 설문</a></li>
+      <li><a href="#usability-section">앱 테스트</a></li>
+      <li><a href="#proposal-section">개선 제안</a></li>
+      <li><a href="#campaign-section">캠페인</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 1. Hero
+══════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">데이터 액티비즘 프로젝트 · 서울시 응급의료 정보 접근성</p>
+    <h1 class="hero-title">응급실은 있는데,<br>갈 수 있는 응급실은<br>어디인가?</h1>
+    <p class="hero-sub">서울시 공공데이터 · 시민 설문 · 앱 사용성 테스트로 본<br>응급실 뺑뺑이와 공공 응급의료 정보 접근성</p>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-num">97.4<span class="stat-unit">%</span></span>
+        <span class="stat-desc">응급똑똑 앱을<br>모른다고 응답</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">76.3<span class="stat-unit">%</span></span>
+        <span class="stat-desc">중증질환 정보<br>미공개율 최고(투석)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">0<span class="stat-unit">%</span></span>
+        <span class="stat-desc">응급상황에서<br>공공앱을 사용할 것</span>
+      </div>
+    </div>
+
+    <div class="hero-btns">
+      <a class="btn-primary" href="#map-section">데이터 보기</a>
+      <a class="btn-ghost" href="#survey-section">설문 결과</a>
+      <a class="btn-ghost" href="#proposal-section">개선 제안</a>
+    </div>
+  </div>
+  <div class="hero-scroll">↓</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 2. 문제 정의
+══════════════════════════════════════════════════════════════ -->
+<section id="problem-section" class="section section-dark">
+  <div class="container">
+    <p class="section-eyebrow">문제 정의</p>
+    <h2 class="section-title">가까운 응급실이 항상<br>갈 수 있는 응급실은 아니다</h2>
+
+    <div class="case-block">
+      <div class="case-video">
+        <iframe
+          src="https://www.youtube.com/embed/30dmdcK4fvM"
+          title="유튜버 임라라 응급실 뺑뺑이 사례"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="case-text">
+        <p class="case-label">실제 사례</p>
+        <p class="case-body">유튜버 임라라는 쌍둥이 제왕절개 후 하혈과 실신을 반복했지만, 산모를 받아줄 응급실을 찾지 못해 먼 병원으로 이동해야 했다. 응급실은 가까이 있었다. 그러나 <strong>갈 수 있는 응급실은</strong> 따로 있었다.</p>
+      </div>
+    </div>
+
+    <p class="section-message">응급실 뺑뺑이는 단순한 병원 부족 문제가 아니다. 이 프로젝트는 뺑뺑이를 <strong>공공 응급의료 정보 접근성 문제</strong>로 재정의한다.</p>
+
+    <div class="problem-cols">
+      <div class="problem-col">
+        <div class="problem-bigstat">60<span>%</span></div>
+        <h3>정보 비대칭</h3>
+        <p class="problem-lead">설명불가 미공개율 최고</p>
+        <p>장비가 있는데도 수용 가능 정보를 공개하지 않는 병원이 존재한다.</p>
+      </div>
+      <div class="problem-col">
+        <div class="problem-bigstat">7<span>개</span></div>
+        <h3>공급 절대 부족</h3>
+        <p class="problem-lead">가용 병상 중앙값</p>
+        <p>서울 응급실 전체 실시간 가용 병상의 중앙값은 단 7개다.</p>
+      </div>
+      <div class="problem-col">
+        <div class="problem-bigstat">100<span>%</span></div>
+        <h3>지리적 불균형</h3>
+        <p class="problem-lead">강북구 응급실의 신고기관 비율</p>
+        <p>자치구별 응급실 등급과 수가 크게 다르다.</p>
+      </div>
+    </div>
+
+    <!-- 국가통계 근거 -->
+    <div class="national-stats">
+      <p class="nat-stats-label">국가응급의료통계가 확인하는 뺑뺑이의 실체</p>
+      <div class="nat-stats-items">
+        <div class="nat-stat-item">
+          <div class="nat-stat-num">5.6<small>%</small></div>
+          <div class="nat-stat-body">
+            <p class="nat-stat-title">서울 병원 간 재전원율</p>
+            <p class="nat-stat-desc">한 병원에서 이송된 환자가 또다시 이송되는 비율. 전국 평균 3.7%의 1.5배다.</p>
+            <span class="nat-stat-cite">그림 62 · 82-83p</span>
+          </div>
+        </div>
+        <div class="nat-stat-item">
+          <div class="nat-stat-num">50.6<small>%</small></div>
+          <div class="nat-stat-body">
+            <p class="nat-stat-title">3대 중증환자 골든타임 내 도착률</p>
+            <p class="nat-stat-desc">뇌졸중·심근경색·중증외상 환자 중 적정 시간 내 치료기관에 도착한 비율. 절반이 제때 도착하지 못한다.</p>
+            <span class="nat-stat-cite">그림 59 · 76-77p</span>
+          </div>
+        </div>
+        <div class="nat-stat-item">
+          <div class="nat-stat-num">489<small>분</small></div>
+          <div class="nat-stat-body">
+            <p class="nat-stat-title">발병 후 입원 치료까지 평균 소요시간</p>
+            <p class="nat-stat-desc">발병→내원 268.5분, 내원→퇴실 221.1분. 약 8시간이 지나서야 입원 치료가 시작된다.</p>
+            <span class="nat-stat-cite">그림 60-61 · 78-81p</span>
+          </div>
+        </div>
+      </div>
+      <p class="nat-stats-source">출처: 국립중앙의료원 중앙응급의료센터, 「2024 국가응급의료통계 요약 통계」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 3. 우리가 확인한 공공데이터
+══════════════════════════════════════════════════════════════ -->
+<section id="data-section" class="section section-mid">
+  <div class="container">
+    <p class="section-eyebrow">데이터 출처</p>
+    <h2 class="section-title">우리가 확인한 공공데이터</h2>
+    <div class="source-list">
+      <div class="source-row">
+        <div class="source-name">
+          <span class="source-num">01</span>
+          공공데이터포털 API
+        </div>
+        <div class="source-desc">
+          <p>국립중앙의료원 응급의료기관 정보 조회 서비스. 병원별 실시간 병상·장비·중증질환 수용정보.</p>
+          <span class="source-count">전국 534개 · 서울 76개</span>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="source-name">
+          <span class="source-num">02</span>
+          서울 열린데이터광장
+        </div>
+        <div class="source-desc">
+          <p>서울시 응급실 이용자 현황(구별), 월별·요일별·내원시간·내원수단 통계.</p>
+          <span class="source-count">연간 통계 데이터</span>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="source-name">
+          <span class="source-num">03</span>
+          응급의료통계포털
+        </div>
+        <div class="source-desc">
+          <p>NEDIS 기반 응급의료기관 현황, 병상 포화지수, 중증응급질환 통계.</p>
+          <span class="source-count">NEDIS 공식 통계</span>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="source-name">
+          <span class="source-num">04</span>
+          시민 설문조사
+        </div>
+        <div class="source-desc">
+          <p>대학생 및 일반 시민을 대상으로 응급실 뺑뺑이 인식·경험·공공앱 인지도 조사.</p>
+          <span class="source-count">응답자 39명</span>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="source-name">
+          <span class="source-num">05</span>
+          국가응급의료통계
+        </div>
+        <div class="source-desc">
+          <p>국립중앙의료원 중앙응급의료센터 「2024 국가응급의료통계 요약 통계」. 전원·재전원율, 골든타임 도착률, 발병 후 소요시간 등 주요 지표. 서울 병원 간 재전원율(5.6%), 3대 중증환자 골든타임 도착률(50.6%) 등 핵심 근거로 활용.</p>
+          <span class="source-count">14p · 26-32p · 36-48p · 72-85p</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 4. 인터랙티브 지도
+══════════════════════════════════════════════════════════════ -->
+<section id="map-section" class="section section-dark">
+  <div class="container">
+    <p class="section-eyebrow">서울 응급실 현황</p>
+    <h2 class="section-title">응급실의 위치는 확인할 수 있지만,<br>시민이 필요한 건 실제 수용 가능성이다</h2>
+
+    <div class="map-legend">
+      <span class="legend-item"><span class="dot dot-red"></span>권역응급의료센터</span>
+      <span class="legend-item"><span class="dot dot-orange"></span>지역응급의료센터</span>
+      <span class="legend-item"><span class="dot dot-yellow"></span>지역응급의료기관</span>
+      <span class="legend-item"><span class="dot dot-gray"></span>응급실운영신고기관</span>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="chart-wrap" style="margin-top:3rem;">
+      <h3 class="chart-title">자치구별 응급의료기관 수</h3>
+      <canvas id="districtChart" height="300"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 5. 수용 가능성 분석
+══════════════════════════════════════════════════════════════ -->
+<section id="capacity-section" class="section section-mid">
+  <div class="container">
+    <p class="section-eyebrow">응급실 수용 가능성 분석</p>
+    <h2 class="section-title">같은 서울 안에서도, 병원마다<br>공개하는 정보의 범위가 다르다</h2>
+
+    <!-- 전원 사유 컨텍스트 -->
+    <div class="transfer-context">
+      <p class="transfer-context-label">응급환자가 전원되는 이유 <span class="transfer-cite">2024 국가응급의료통계 그림 26-2 · 46p</span></p>
+      <div class="transfer-reasons">
+        <div class="transfer-reason">
+          <span class="transfer-pct">26.6%</span>
+          <span class="transfer-desc">전문응급의료 요함</span>
+        </div>
+        <div class="transfer-reason">
+          <span class="transfer-pct">15.4%</span>
+          <span class="transfer-desc">응급수술·처치 불가</span>
+        </div>
+        <div class="transfer-reason">
+          <span class="transfer-pct">12.1%</span>
+          <span class="transfer-desc">병실 부족</span>
+        </div>
+        <div class="transfer-reason">
+          <span class="transfer-pct">2.3%</span>
+          <span class="transfer-desc">중환자실 부족</span>
+        </div>
+      </div>
+      <p class="transfer-context-note">전원의 절반 이상이 '치료 불가' 또는 '병상 부족' — 병원이 수용 가능한지를 사전에 알 수 없다는 구조적 문제와 직결된다.</p>
+    </div>
+
+    <!-- 파트 A: 중증질환별 정보미공개율 -->
+    <div class="analysis-block">
+      <h3 class="analysis-subtitle">중증질환별 수용정보 공개 현황 <span class="badge">서울 76개 응급의료기관</span></h3>
+      <p class="analysis-desc">Y(수용 가능) / N(불가) / 미공개(NaN) 비율. 미공개는 수용불가가 아니라 정보를 알 수 없는 상태다.</p>
+      <div class="chart-wrap">
+        <canvas id="capacityChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 파트 B: 설명불가능한 미공개 -->
+    <div class="analysis-block" style="margin-top:4rem;">
+      <h3 class="analysis-subtitle">설명 불가능한 미공개 <span class="badge badge-red">장비가 있는데도 공개하지 않는 병원</span></h3>
+      <p class="analysis-desc">능력 지표(장비·시설 보유 여부)가 확인된 병원 중, 수용 가능 정보를 공개하지 않는 병원만 분석했다.</p>
+
+      <div class="capability-table-wrap">
+        <table class="capability-summary">
+          <thead>
+            <tr>
+              <th>중증질환</th>
+              <th>기존 미공개율</th>
+              <th>설명불가 미공개율</th>
+              <th>해당 병원 수</th>
+            </tr>
+          </thead>
+          <tbody id="capabilityTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="capability-detail" class="capability-detail">
+        <p class="detail-hint">※ 표에서 행을 클릭하면 해당 병원 목록이 표시됩니다.</p>
+        <div id="capability-hospitals"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 6. 시민 설문 결과
+══════════════════════════════════════════════════════════════ -->
+<section id="survey-section" class="section section-dark">
+  <div class="container">
+    <p class="section-eyebrow">시민 설문조사</p>
+    <h2 class="section-title">공공앱이 존재해도,<br>시민이 모르면 공공정보는 작동하지 않는다</h2>
+    <p class="section-desc">대학생 및 일반 시민 39명 대상 온라인 설문조사 결과</p>
+
+    <!-- 빅 스탯 3개 -->
+    <div class="survey-big-stats">
+      <div class="big-stat">
+        <span class="big-num">84.6<span class="big-unit">%</span></span>
+        <span class="big-label">응급실 뺑뺑이를<br>심각한 사회문제로 인식</span>
+      </div>
+      <div class="big-stat big-stat-accent">
+        <span class="big-num">97.4<span class="big-unit">%</span></span>
+        <span class="big-label">응급똑똑 앱을<br>모른다고 응답</span>
+      </div>
+      <div class="big-stat">
+        <span class="big-num">0<span class="big-unit">%</span></span>
+        <span class="big-label">응급상황에서<br>공공앱을 활용할 것</span>
+      </div>
+    </div>
+
+    <!-- 차트 3개 -->
+    <div class="survey-charts">
+      <div class="chart-card">
+        <h3 class="chart-title">응급상황 시 정보 탐색 방법</h3>
+        <div class="chart-wrap">
+          <canvas id="searchMethodChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">응급상황에서 가장 필요한 정보</h3>
+        <div class="chart-wrap">
+          <canvas id="needInfoChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">공공앱에서 원하는 기능</h3>
+        <div class="chart-wrap">
+          <canvas id="wantFeatureChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 7. 공공앱 사용성 테스트
+══════════════════════════════════════════════════════════════ -->
+<section id="usability-section" class="section section-mid">
+  <div class="container">
+    <p class="section-eyebrow">앱 사용성 테스트</p>
+    <h2 class="section-title">응급똑똑 앱을 직접 써봤다 <span class="badge">4개 시나리오</span></h2>
+    <div class="section-bridge">
+      <p>설문 응답자의 97.4%가 응급똑똑을 모른다고 했다. 그런데 '모른다'는 것이 전부인가? <strong>앱 인지도 문제와 앱의 실제 작동 문제는 다르다.</strong> 시민이 이 앱을 안다고 가정하더라도, 응급 상황에서 실제로 작동하는가? 우리는 4가지 실제 응급 시나리오로 직접 확인했다.</p>
+    </div>
+
+    <div class="scenario-list">
+      <div class="scenario-item">
+        <div class="scenario-header">
+          <span class="scenario-tag">#1</span>
+          <div class="scenario-meta">
+            <h4>소아 고열 (열성 경련)</h4>
+            <span class="scenario-ctx">토요일 밤 11시, 3세 아이가 39도 고열과 경련</span>
+          </div>
+        </div>
+        <div class="scenario-findings">
+          <div class="finding pos">달빛어린이 카테고리, '금일 야간진료' 표시로 빠른 식별</div>
+          <div class="finding neg">소아/일반 응급실 구분 모호 — '아동 39도 고열' 검색 시 일반 결과와 동일</div>
+        </div>
+      </div>
+      <div class="scenario-item">
+        <div class="scenario-header">
+          <span class="scenario-tag">#2</span>
+          <div class="scenario-meta">
+            <h4>뇌졸중 의심 (편마비)</h4>
+            <span class="scenario-ctx">평일 오후 2시, 할아버지 갑작스러운 언어장애</span>
+          </div>
+        </div>
+        <div class="scenario-findings">
+          <div class="finding pos">증상별 세분화된 문진 프로세스 제공</div>
+          <div class="finding neg">혈압·혈당·산소포화도 수치 입력 요구 / CT·MRI 가동 여부 확인 불가</div>
+        </div>
+      </div>
+      <div class="scenario-item">
+        <div class="scenario-header">
+          <span class="scenario-tag">#3</span>
+          <div class="scenario-meta">
+            <h4>구급차 내 실시간 이송</h4>
+            <span class="scenario-ctx">새벽, 주변 대학병원 가용병상 비교 필요</span>
+          </div>
+        </div>
+        <div class="scenario-findings">
+          <div class="finding pos">혼잡도 색상 시각화 (빨간 세모 / 초록 동그라미)</div>
+          <div class="finding neg">가까운 병원 중 '병상 정보 없음' 다수 — 막상 갔는데 수용 거부 우려</div>
+        </div>
+      </div>
+      <div class="scenario-item">
+        <div class="scenario-header">
+          <span class="scenario-tag">#4</span>
+          <div class="scenario-meta">
+            <h4>손가락 베임 (봉합 필요)</h4>
+            <span class="scenario-ctx">요리 중 자상, 경증이지만 봉합 필요</span>
+          </div>
+        </div>
+        <div class="scenario-findings">
+          <div class="finding pos">중증도 파악 후 2차 병원 적절 추천, 대학병원 쏠림 없음</div>
+          <div class="finding neg">문진 질문 너무 많아 병원 결정까지 약 3분 소요</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5점 척도 평가 -->
+    <div class="usability-scores">
+      <h3>5점 척도 종합 평가</h3>
+      <div class="score-list">
+        <div class="score-row">
+          <span class="score-label">시간 효율성</span>
+          <div class="score-track"><div class="score-fill" style="width:40%"></div></div>
+          <span class="score-val">2 / 5</span>
+          <span class="score-note">목적지까지 최소 5~10회 터치</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">정보 신뢰성</span>
+          <div class="score-track"><div class="score-fill" style="width:60%"></div></div>
+          <span class="score-val">3 / 5</span>
+          <span class="score-note">실시간 업데이트 양호, 장비 확인 불가</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">조작 편의성</span>
+          <div class="score-track"><div class="score-fill" style="width:60%"></div></div>
+          <span class="score-val">3 / 5</span>
+          <span class="score-note">혼잡도 직관적, 진료과목 필터 비직관적</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">정보 이해도</span>
+          <div class="score-track"><div class="score-fill" style="width:60%"></div></div>
+          <span class="score-val">3 / 5</span>
+          <span class="score-note">'권역/지역응급의료센터' 구분 어려움</span>
+        </div>
+      </div>
+      <div class="critical-bug">
+        <strong>치명적 버그</strong>: 증상 직접 입력 중 뒤로가기 시 화면이 하얗게 변하며 앱이 멈춤 — 재실행 필요
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 8. 개선 제안
+══════════════════════════════════════════════════════════════ -->
+<section id="proposal-section" class="section section-dark">
+  <div class="container">
+    <p class="section-eyebrow">개선 제안</p>
+    <h2 class="section-title">응급똑똑 앱, 이렇게 고치면<br>더 많은 생명을 구할 수 있다</h2>
+
+    <!-- 현재 vs 개선안 비교 mockup -->
+    <div class="app-comparison">
+
+      <!-- 비교 1: 병원 목록 -->
+      <div class="comparison-pair">
+        <p class="comparison-title">병원 목록 화면 — 개선안 02 · 07 · 08 적용</p>
+        <div class="comparison-screens">
+
+          <div class="app-screen-wrap">
+            <p class="screen-label">현재</p>
+            <div class="phone-mock">
+              <div class="phone-statusbar">9:41</div>
+              <div class="phone-body">
+                <p class="pm-title">응급 병원 찾기</p>
+                <p class="pm-sub">내 위치 기반 병원 목록</p>
+                <div class="pm-list">
+                  <div class="pm-item">
+                    <div class="pm-item-info"><span class="pm-name">서울대학교병원</span><span class="pm-meta">응급의학과 | 2.3km</span></div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info"><span class="pm-name">세브란스병원</span><span class="pm-meta">응급센터 | 3.1km</span></div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info"><span class="pm-name">삼성서울병원</span><span class="pm-meta">외상센터 | 4.7km</span></div>
+                    <span class="pm-badge orange-t">● 혼잡</span>
+                  </div>
+                  <div class="pm-item pm-item-checked">
+                    <div class="pm-item-info"><span class="pm-name pm-muted">아산병원</span><span class="pm-meta pm-muted">응급의학과 | 5.2km</span></div>
+                    <span class="pm-check-icon">✓</span>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info"><span class="pm-name">고려대학교병원</span><span class="pm-meta">뇌졸중센터 | 6.8km</span></div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                </div>
+              </div>
+              <div class="phone-nav">목록 | 지도 | 이력 | 설정</div>
+            </div>
+          </div>
+
+          <div class="app-screen-wrap">
+            <p class="screen-label screen-label-after">개선안</p>
+            <div class="phone-mock phone-mock-improved">
+              <div class="phone-statusbar">9:41</div>
+              <div class="phone-body">
+                <p class="pm-title">응급 병원 찾기</p>
+                <p class="pm-sub">내 위치 기반 병원 목록</p>
+                <div class="pm-filter-bar">
+                  <span class="pm-filter-text">병상정보 없음 숨기기</span>
+                  <span class="pm-toggle-on"></span>
+                </div>
+                <div class="pm-list">
+                  <div class="pm-item">
+                    <div class="pm-item-info">
+                      <span class="pm-name">서울대학교병원</span>
+                      <span class="pm-type">권역응급의료센터 · 3차 대학병원</span>
+                      <span class="pm-meta">응급의학과 | 2.3km</span>
+                    </div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info">
+                      <span class="pm-name">세브란스병원</span>
+                      <span class="pm-type">권역응급의료센터 · 3차 대학병원</span>
+                      <span class="pm-meta">응급센터 | 3.1km</span>
+                    </div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info">
+                      <span class="pm-name">삼성서울병원</span>
+                      <span class="pm-type">권역응급의료센터 · 3차 대학병원</span>
+                      <span class="pm-meta">외상센터 | 4.7km</span>
+                    </div>
+                    <span class="pm-badge orange-t">● 혼잡</span>
+                  </div>
+                  <div class="pm-item pm-item-checked">
+                    <div class="pm-item-info"><span class="pm-name pm-muted">아산병원</span><span class="pm-meta pm-muted">응급의학과 | 5.2km</span></div>
+                    <div class="pm-check-wrap"><span class="pm-check-icon">✓</span><span class="pm-read-label">확인완료</span></div>
+                  </div>
+                  <div class="pm-item">
+                    <div class="pm-item-info">
+                      <span class="pm-name">고려대학교병원</span>
+                      <span class="pm-type">지역응급의료센터 · 2차 종합병원</span>
+                      <span class="pm-meta">뇌졸중센터 | 6.8km</span>
+                    </div>
+                    <span class="pm-badge green-t">● 가용</span>
+                  </div>
+                </div>
+              </div>
+              <div class="phone-nav">목록 | 지도 | 이력 | 설정</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="comparison-tags">
+          <span class="ctag">02 읽음 표시 강화</span>
+          <span class="ctag">07 실시간 필터 토글</span>
+          <span class="ctag">08 법정 용어 병기</span>
+        </div>
+      </div>
+
+      <!-- 비교 2: 자원 현황 -->
+      <div class="comparison-pair">
+        <p class="comparison-title">병원 자원 현황 화면 — 개선안 06 적용</p>
+        <div class="comparison-screens">
+
+          <div class="app-screen-wrap">
+            <p class="screen-label">현재</p>
+            <div class="phone-mock">
+              <div class="phone-statusbar">9:41</div>
+              <div class="phone-body">
+                <p class="pm-title">병원 자원 현황</p>
+                <p class="pm-sub">실시간 부서별 가용 상태</p>
+                <div class="pm-circles">
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-green"></div><span class="pm-circle-label">소아과</span><span class="pm-circle-status green-t">가용</span></div>
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-green"></div><span class="pm-circle-label">CT 스캔</span><span class="pm-circle-status green-t">가용</span></div>
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-orange"></div><span class="pm-circle-label">뇌수술</span><span class="pm-circle-status orange-t">주의</span></div>
+                </div>
+                <div class="pm-dept-list">
+                  <div class="pm-dept green-b"><span class="pm-dept-name">소아과</span><span class="pm-dept-sub">소아 발열 프로토콜</span><span class="pm-dept-meta">정상 운영 | 대기 0명</span></div>
+                  <div class="pm-dept green-b"><span class="pm-dept-name">영상의학과</span><span class="pm-dept-sub">CT 스캔 장비</span><span class="pm-dept-meta">정상 운영 | 대기 2명</span></div>
+                  <div class="pm-dept orange-b"><span class="pm-dept-name">신경외과</span><span class="pm-dept-sub">뇌수술 수술실</span><span class="pm-dept-meta warn-t">제한적 가용 | 대기 4명</span></div>
+                </div>
+                <p class="pm-update">마지막 업데이트: 2026.06.07 14:32</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-screen-wrap">
+            <p class="screen-label screen-label-after">개선안</p>
+            <div class="phone-mock phone-mock-improved">
+              <div class="phone-statusbar">9:41</div>
+              <div class="phone-body">
+                <p class="pm-title">병원 자원 현황</p>
+                <p class="pm-sub">실시간 부서별 가용 상태</p>
+                <div class="pm-circles">
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-green"></div><span class="pm-circle-label">소아과</span><span class="pm-circle-status green-t">가용</span></div>
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-green"></div><span class="pm-circle-label">CT 스캔</span><span class="pm-circle-status green-t">가용</span></div>
+                  <div class="pm-circle-item"><div class="pm-circle pm-circle-orange"></div><span class="pm-circle-label">뇌수술</span><span class="pm-circle-status orange-t">주의</span></div>
+                </div>
+                <div class="pm-dept-list">
+                  <div class="pm-dept green-b">
+                    <span class="pm-dept-name">소아과</span>
+                    <span class="pm-dept-sub">소아 발열 프로토콜</span>
+                    <span class="pm-dept-meta">정상 운영 | 대기 0명</span>
+                    <span class="pm-dept-extra">소아청소년과 전문의 상주 중</span>
+                  </div>
+                  <div class="pm-dept green-b">
+                    <span class="pm-dept-name">영상의학과</span>
+                    <span class="pm-dept-sub">CT 스캔 장비</span>
+                    <span class="pm-dept-meta">정상 운영 | 대기 2명</span>
+                    <span class="pm-dept-extra">CT 2대 가동 중 · MRI 예약 가능</span>
+                  </div>
+                  <div class="pm-dept orange-b">
+                    <span class="pm-dept-name">신경외과</span>
+                    <span class="pm-dept-sub">뇌수술 수술실</span>
+                    <span class="pm-dept-meta warn-t">제한적 가용 | 대기 4명</span>
+                    <span class="pm-dept-extra">수술팀 1팀 대기 · 예상 40분</span>
+                  </div>
+                </div>
+                <p class="pm-update pm-update-live">방금 업데이트 · 2026.06.07 14:32</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="comparison-tags">
+          <span class="ctag">06 의료 자원 정보 상세 공개</span>
+        </div>
+      </div>
+
+    </div><!-- /.app-comparison -->
+
+    <div class="proposal-list">
+      <div class="proposal-category">
+        <p class="proposal-cat-label">즉시 수정</p>
+        <p class="proposal-cat-source">사용성 테스트 중 팀원이 직접 마주친 오류 · 구조적 불편</p>
+        <div class="proposal-items">
+          <div class="proposal-item">
+            <span class="proposal-n">01</span>
+            <div class="proposal-body">
+              <h4>화면 먹통 버그 수정</h4>
+              <p>증상 입력 중 뒤로가기 시 앱이 멈추는 치명적 버그를 반드시 수정해야 한다.</p>
+            </div>
+          </div>
+          <div class="proposal-item">
+            <span class="proposal-n">02</span>
+            <div class="proposal-body">
+              <h4>히스토리 유지</h4>
+              <p>뒤로가기 시 이전 스크롤 위치 기억. 확인한 병원을 '읽음'으로 표시해 중복 탐색 방지.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="proposal-category">
+        <p class="proposal-cat-label">기능 확장</p>
+        <p class="proposal-cat-source">설문: 시민이 원한다고 밝힌 기능 — 진료 가능 여부 확인 71.8% · 실시간 병상 66.7%</p>
+        <div class="proposal-items">
+          <div class="proposal-item">
+            <span class="proposal-n">03</span>
+            <div class="proposal-body">
+              <h4>지도 연동 다각화</h4>
+              <p>카카오맵 단독 연동 → 네이버지도·티맵 선택 가능하도록 확장.</p>
+            </div>
+          </div>
+          <div class="proposal-item">
+            <span class="proposal-n">04</span>
+            <div class="proposal-body">
+              <h4>소아 모드 신설</h4>
+              <p>메인 화면에 소아 모드 버튼 추가. 야간·주말에 소아청소년과 전문의 상주 병원만 즉시 필터링.</p>
+            </div>
+          </div>
+          <div class="proposal-item">
+            <span class="proposal-n">05</span>
+            <div class="proposal-body">
+              <h4>활력징후 입력 장벽 완화</h4>
+              <p>혈압·혈당·산소포화도 수치 입력에 '모름/측정불가' 옵션 추가. 집에 측정기 없는 일반인 배려.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="proposal-category">
+        <p class="proposal-cat-label">데이터 접근성</p>
+        <p class="proposal-cat-source">공공데이터 분석: 장비 보유에도 불구한 정보 미공개 병원 존재 · 투석 76.3% 미공개율</p>
+        <div class="proposal-items">
+          <div class="proposal-item">
+            <span class="proposal-n">06</span>
+            <div class="proposal-body">
+              <h4>의료 자원 정보 공개</h4>
+              <p>CT·MRI 장비 가동 여부, 뇌혈관 수술팀 대기 상태 등 중증 수용에 필수적인 정보 시각화.</p>
+            </div>
+          </div>
+          <div class="proposal-item">
+            <span class="proposal-n">07</span>
+            <div class="proposal-body">
+              <h4>실시간 업데이트 필터</h4>
+              <p>'병상 정보 없음' 병원을 필터링할 수 있는 토글 추가. 뺑뺑이의 직접 원인 차단.</p>
+            </div>
+          </div>
+          <div class="proposal-item">
+            <span class="proposal-n">08</span>
+            <div class="proposal-body">
+              <h4>법정 용어 병행 표기</h4>
+              <p>'권역응급의료센터' → '3차 대형 대학병원' 병기. 일반인이 직관적으로 병원 규모 파악 가능하도록.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 9. 카드뉴스 캠페인
+══════════════════════════════════════════════════════════════ -->
+<section id="campaign-section" class="section section-dark">
+  <div class="container">
+    <p class="section-eyebrow">SNS 캠페인</p>
+    <h2 class="section-title">분석으로 그치지 않는다<br>데이터를 시민에게 직접 전달한다</h2>
+    <p class="section-desc">97.4%가 응급똑똑을 모른다는 사실이 방향을 가리켰다. 기능이 아무리 좋아도 모르면 쓸 수 없다. 우리는 데이터 분석과 앱 사용성 테스트 결과를 바탕으로 「응급똑똑」 홍보 카드뉴스를 제작하고, SNS 캠페인을 준비 중에 있다.</p>
+
+    <div class="campaign-arc">
+      <div class="arc-phase">
+        <p class="arc-phase-label">1단계 — 문제 제기</p>
+        <p class="arc-phase-desc">설문 데이터로 문제의 크기를 보여준다</p>
+        <div class="arc-cards">
+          <div class="arc-card-item">
+            <span class="arc-n">01</span>
+            <span class="arc-title">"응급실 뺑뺑이, 남의 일이 아닙니다"</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">02</span>
+            <span class="arc-title">설문조사 소개 — 39명, 대학생 및 일반 시민</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">03</span>
+            <span class="arc-title">84.6%가 응급실 뺑뺑이를 심각한 사회문제로 인식</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">04</span>
+            <span class="arc-title">응급상황에서 필요한 정보 — 진료 가능 병원 41.0% 1위</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">05</span>
+            <span class="arc-title">정보 탐색 방법 — 가족·지인 38.9%, 공공앱 0%</span>
+          </div>
+          <div class="arc-card-item arc-card-highlight">
+            <span class="arc-n">06</span>
+            <span class="arc-title">충격: 응답자의 97.4%가 응급똑똑을 모른다</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-connector">→</div>
+
+      <div class="arc-phase">
+        <p class="arc-phase-label">2단계 — 해결책 소개</p>
+        <p class="arc-phase-desc">이미 존재하는 공공 서비스를 알린다</p>
+        <div class="arc-cards">
+          <div class="arc-card-item">
+            <span class="arc-n">07</span>
+            <span class="arc-title">응급똑똑이란? — 응급실 검색 · 혼잡도 · 병상 현황</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">08</span>
+            <span class="arc-title">사용 방법 — 설치 → 위치 설정 → 실시간 조회</span>
+          </div>
+          <div class="arc-card-item">
+            <span class="arc-n">09</span>
+            <span class="arc-title">시민이 원하는 개선 방향 — 사용성 테스트 + 설문 근거</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-connector">→</div>
+
+      <div class="arc-phase">
+        <p class="arc-phase-label">3단계 — 행동 촉구</p>
+        <p class="arc-phase-desc">지금 알아두는 것이 가장 빠른 대비</p>
+        <div class="arc-cards">
+          <div class="arc-card-item arc-card-highlight">
+            <span class="arc-n">10</span>
+            <span class="arc-title">"응급상황은 예고 없이 찾아옵니다" — QR코드·다운로드 안내</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="campaign-goal">
+      <p class="campaign-goal-label">캠페인 목표</p>
+      <p>응급똑똑 인지도 문제는 앱 개발의 문제이기 이전에 홍보·접근성의 문제다. 본 캠페인은 데이터 분석 결과를 시민이 이해할 수 있는 언어로 번역하여, 공공 응급의료 서비스가 실제로 쓰이는 것을 목표로 한다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 10. 정보공개청구
+══════════════════════════════════════════════════════════════ -->
+<section id="foi-section" class="section section-mid">
+  <div class="container">
+    <p class="section-eyebrow">정보공개청구</p>
+    <h2 class="section-title">응급의료 정보는 공공성이 크지만,<br>시민이 접근할 수 있는 데이터에는 여전히 경계가 있다</h2>
+
+    <div class="foi-grid">
+      <div class="foi-block">
+        <h3>청구 시도 기관</h3>
+        <ul>
+          <li>보건복지부</li>
+          <li>중앙응급의료센터</li>
+          <li>서울특별시</li>
+          <li>서울소방재난본부</li>
+          <li>국립중앙의료원</li>
+        </ul>
+      </div>
+      <div class="foi-block">
+        <h3>요청 핵심 자료</h3>
+        <ul>
+          <li>응급똑똑 앱 다운로드 수 및 월간 이용자 수</li>
+          <li>응급똑똑 앱 홍보 예산 및 채널</li>
+          <li>서울시 응급환자 재이송 건수</li>
+          <li>병원 수용곤란 사유별 통계</li>
+          <li>최근 3년간 병원 선정 지연 관련 통계</li>
+        </ul>
+      </div>
+      <div class="foi-block foi-status">
+        <h3>현재 상태</h3>
+        <p class="foi-pending">청구 진행 중 / 응답 대기</p>
+        <p class="foi-note">자료를 받으면 분석 근거 강화에 활용한다. 자료를 받지 못하더라도, 이는 시민에게 중요한 응급의료 데이터 접근성의 한계를 보여주는 증거가 된다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     Section 10. 결론 + Footer
+══════════════════════════════════════════════════════════════ -->
+<section id="conclusion-section" class="section section-dark">
+  <div class="container conclusion-container">
+    <p class="section-eyebrow">결론</p>
+    <blockquote class="conclusion-quote">
+      응급실 뺑뺑이를 줄이기 위해 필요한 것은<br>단순히 더 많은 앱이 아니라,<br>이미 존재하는 공공 응급의료 정보가<br>시민에게 더 쉽게 도달하고,<br>더 명확하게 이해되며,<br>실제 응급상황에서 활용될 수 있도록<br>만드는 것이다.
+    </blockquote>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-section">
+      <h4>데이터 출처</h4>
+      <ul>
+        <li>국립중앙의료원 전국 응급의료기관 정보 조회 서비스 (공공데이터포털)</li>
+        <li>서울 열린데이터광장 응급실 이용 현황</li>
+        <li>응급의료통계포털 (NEDIS)</li>
+        <li>국립중앙의료원 중앙응급의료센터, 「2024 국가응급의료통계 요약 통계」</li>
+        <li>시민 설문조사 (대학생·일반 시민 39명, 구글폼)</li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>분석 코드</h4>
+      <p>데이터 수집·분석 Python 코드는 GitHub에 공개 예정입니다.</p>
+    </div>
+    <div class="footer-disclaimer">
+      <p>본 웹페이지는 데이터 액티비즘 수업 프로젝트의 결과물이며, 실제 응급의료 판단이나 병원 추천을 제공하지 않습니다. 실제 응급상황에서는 즉시 <strong>119</strong>에 신고하거나 공식 응급의료 서비스를 이용하세요.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/map.js"></script>
+<script src="js/charts.js"></script>
+</body>
+</html>
