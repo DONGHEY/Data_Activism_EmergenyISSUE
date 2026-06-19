@@ -796,6 +796,44 @@ img { max-width: 100%; }
   .comparison-screens { grid-template-columns: 1fr; }
 }
 
+/* ── 데이터 다운로드 ── */
+.dl-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+}
+.dl-item {
+  background: var(--bg-dark); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.dl-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.dl-tag {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+  background: #1f2d1f; color: #4ade80; border: 1px solid #2d6a4f;
+  border-radius: 4px; padding: 0.15rem 0.5rem;
+}
+.dl-size { font-size: 0.75rem; color: var(--text-muted); }
+.dl-name { font-size: 1rem; font-weight: 700; color: var(--text); }
+.dl-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; flex: 1; }
+.dl-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.dl-btn {
+  font-size: 0.8rem; font-weight: 600; padding: 0.45rem 1rem;
+  border-radius: 6px; text-decoration: none; transition: opacity 0.15s;
+}
+.dl-btn:hover { opacity: 0.82; }
+.dl-btn-primary { background: var(--accent); color: #fff; }
+.dl-btn-ghost {
+  background: transparent; color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.dl-source-note {
+  margin-top: 1.75rem; font-size: 0.82rem; color: var(--text-muted); text-align: center;
+}
+.dl-source-note a { color: var(--accent); text-decoration: none; }
+.dl-source-note a:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+  .dl-grid { grid-template-columns: 1fr; }
+}
+
 /* ── 결론 ── */
 .conclusion-container { text-align: center; padding: 3rem 0; }
 .conclusion-quote {

@@ -32,6 +32,7 @@
       <li><a href="#usability-section">앱 테스트</a></li>
       <li><a href="#proposal-section">개선 제안</a></li>
       <li><a href="#campaign-section">캠페인</a></li>
+      <li><a href="#data-download-section">데이터</a></li>
     </ul>
   </div>
 </nav>
@@ -853,6 +854,56 @@
         <p class="foi-note">자료를 받으면 분석 근거 강화에 활용한다. 자료를 받지 못하더라도, 이는 시민에게 중요한 응급의료 데이터 접근성의 한계를 보여주는 증거가 된다.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     데이터 다운로드
+══════════════════════════════════════════════════════════════ -->
+<section id="data-download-section" class="section section-mid">
+  <div class="container">
+    <p class="section-eyebrow">공개 데이터</p>
+    <h2 class="section-title">분석에 사용한 데이터를<br>직접 확인하세요</h2>
+    <p class="section-desc" style="margin-bottom:2rem">본 프로젝트의 모든 분석 데이터는 공개합니다. 아래 파일을 다운로드하거나 브라우저에서 바로 열 수 있습니다.</p>
+    <div class="dl-grid">
+      <div class="dl-item">
+        <div class="dl-meta">
+          <span class="dl-tag">JSON</span>
+          <span class="dl-size">20 KB</span>
+        </div>
+        <p class="dl-name">서울 응급의료기관 현황</p>
+        <p class="dl-desc">서울 76개 응급의료기관의 위치(위경도), 등급, 가용 병상 수. Leaflet 지도의 원본 데이터.</p>
+        <div class="dl-actions">
+          <a class="dl-btn dl-btn-primary" href="data/er_map.json" download="er_map.json">다운로드</a>
+          <a class="dl-btn dl-btn-ghost" href="data/er_map.json" target="_blank">브라우저에서 보기</a>
+        </div>
+      </div>
+      <div class="dl-item">
+        <div class="dl-meta">
+          <span class="dl-tag">JSON</span>
+          <span class="dl-size">1 KB</span>
+        </div>
+        <p class="dl-name">중증질환별 수용 가능성</p>
+        <p class="dl-desc">12개 중증질환별 정보 공개(Y) · 없음(N) · 미공개(NaN) 집계. 수평 누적 막대그래프의 원본 데이터.</p>
+        <div class="dl-actions">
+          <a class="dl-btn dl-btn-primary" href="data/er_seoul_stats.json" download="er_seoul_stats.json">다운로드</a>
+          <a class="dl-btn dl-btn-ghost" href="data/er_seoul_stats.json" target="_blank">브라우저에서 보기</a>
+        </div>
+      </div>
+      <div class="dl-item">
+        <div class="dl-meta">
+          <span class="dl-tag">JSON</span>
+          <span class="dl-size">1 KB</span>
+        </div>
+        <p class="dl-name">자치구별 응급실 분포</p>
+        <p class="dl-desc">서울 25개 자치구별 응급의료기관 수 집계. 지역 간 불균형 분석의 원본 데이터.</p>
+        <div class="dl-actions">
+          <a class="dl-btn dl-btn-primary" href="data/district_stats.json" download="district_stats.json">다운로드</a>
+          <a class="dl-btn dl-btn-ghost" href="data/district_stats.json" target="_blank">브라우저에서 보기</a>
+        </div>
+      </div>
+    </div>
+    <p class="dl-source-note">원본 CSV 데이터 및 수집 Python 코드: <a href="https://github.com/DONGHEY/Data_Activism_EmergenyISSUE" target="_blank">GitHub 저장소</a></p>
   </div>
 </section>
 
